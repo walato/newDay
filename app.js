@@ -37,10 +37,17 @@ var UIController =(function(){
 // public Controller
 var controller = (function(budgetCrtl , UICrtl){
     
-    var DOM = UICrtl.getDOMString();
+    var setupEventListeners = function(){
+        var DOM = UICrtl.getDOMString();
+        document.querySelector(DOM.addBtn).addEventListener('click', ctrlAddEvent);
+        document.addEventListener('keypress',function(e){
+            if(e.keyCode===13){
+                ctrlAddEvent();
+            }
+        });
+    };
 
-    function ctrlAddEvent(){
-        
+    function ctrlAddEvent(){        
         // 1 get the field input
         var input= UICrtl.getInput();
         console.log(input);
@@ -50,14 +57,17 @@ var controller = (function(budgetCrtl , UICrtl){
         // 4 calculate budget 
         // 5 display budget on UI
         
-    }
+    };
 
-    document.querySelector(DOM.addBtn).addEventListener('click', ctrlAddEvent);
-
-    document.addEventListener('keypress',function(e){
-        if(e.keyCode===13){
-            ctrlAddEvent();
+    
+    
+    return{
+        init : function(){
+            console.log("started the APP")
+            setupEventListeners();
         }
-    });
+    };
     
 })(budgetController , UIController);
+
+controller.init();
