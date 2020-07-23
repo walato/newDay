@@ -15,14 +15,38 @@ var budgetController = (function(){
 
     var data = {
             allItems : {
-                Exp : [],
-                Inc : []
+                exp : [],
+                inc : []
             },
             totals : {
                 exp : 0,
                 inc : 0
             }    
     }
+
+    return{
+        addItem : function(type, des, val){
+            var ID, newItem;
+            console.log(type);
+            if(data.allItems[type].length>0){
+                ID=data.allItems[type][data.allItems[type].length-1].id+1;
+            }else{
+                ID= 0;
+            }
+
+            if(type ==='inc'){
+                newItem= new Income(ID, des, val);
+            }else if(type ==='exp'){
+                newItem=new Expense(ID, des, val);
+            }
+
+            data.allItems[type].push(newItem);
+            return newItem;
+        },
+        testing : function(){
+            console.log(data);
+        }
+    };
 
 })();
 
@@ -41,7 +65,7 @@ var UIController =(function(){
     return{
         getInput:function(){
             return {
-                tpye:document.querySelector(DOMString.inputType).value,
+                type:document.querySelector(DOMString.inputType).value,
                 description : document.querySelector(DOMString.inputDescription).value,
                 value : document.querySelector(DOMString.inputValue).value
             };
@@ -68,8 +92,12 @@ var controller = (function(budgetCrtl , UICrtl){
 
     function ctrlAddEvent(){        
         // 1 get the field input
-        var input= UICrtl.getInput();
-        console.log(input);
+        var input, newItem;
+       
+        input= UICrtl.getInput();
+        console.log(input.type + " d");
+        newItem = budgetCrtl.addItem(input.type, input.description, input.value);
+
         
         // 2 add the item to budget controller
         // 3 add the item to UI
@@ -78,8 +106,6 @@ var controller = (function(budgetCrtl , UICrtl){
         
     };
 
-    
-    
     return{
         init : function(){
             console.log("started the APP")
